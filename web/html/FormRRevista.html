@@ -1,0 +1,38 @@
+<link href="css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
+<form action="ControladorRRevista" method="POST" enctype="multipart/form-data">
+    <div class="form-group col-lg-4 container">
+        <label for="nombreR">Nombre de la Revista:</label>
+        <input  required class="form-control" id="nombreR" name="nombreR" placeholder="Nombre de tu Revista">
+    </div>
+    <div class="form-group col-lg-4 container">
+        <label for="autor">Autor:</label>
+        <input class="form-control" id="autor" name="autor" placeholder="Autor de la Revista">
+    </div>
+    <div class="form-group col-lg-4 container">
+        <label for="etiqueta">Etiqueta:</label>
+        <input class="form-control" id="etiqueta" name="etiqueta" placeholder="Etiquetas de la Revista">
+    </div>
+    <div class="form-group col-lg-4 container">
+        <label for="descripcionR">Descripcion:</label>
+        <textarea cols="30" rows="6" class="form-control" id="descripcionR" name="descripcionR" placeholder="Agrega una descripcion a tu libro"></textarea>
+    </div>
+    <div class="form-group col-lg-4 container">
+        <label for="categoria">Categorias:</label>
+        <input class="form-control" id="categoria" name="categoria" placeholder="Categorias de tu revista">
+    </div>
+    <div class="form-group col-lg-4 container">
+        <label for="cuotaS">Cuota de Suscripcion:</label>
+        <input class="form-control" id="cuotaS" name="cuotaS" placeholder="Ingresa la Cuota por ver tu Revista">
+    </div>
+    <div class="form-group col-lg-4 container">
+        <label for="fechaC">Fecha de Creacion:</label>
+        <input class="form-control" id="fechaC" name="fechaC" placeholder="yyyy/MM/dd">
+    </div>
+    <div class="form-group col-lg-4 container">
+        <label for="pdf">Sube tu Revista:</label>
+        <input type="file" class="form-control" id="pdf" name="pdf">
+    </div> 
+    <div class="col-lg-4 container">
+        <button type="submit" class="btn btn-primary">Registrar</button>
+    </div>
+</form>

@@ -1,0 +1,46 @@
+<link href="css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
+<form action="ControladorRU" method="POST" enctype="multipart/form-data">
+    <div class="form-group col-lg-4 container">
+        <label for="nombre">Nombre:</label>
+        <input class="form-control" id="nombre" name="nombre" placeholder="Ingresa tu nombre!">
+    </div>
+    <div class="form-group col-lg-4 container">
+        <label for="pass">Password:</label>
+        <input type="password" class="form-control" id="pass" name="pass" placeholder="Ingresa tu password">
+    </div>
+    <div class="form-group col-lg-4 container">
+        <label for="nivelUsuario">Tipo de Usuario(Editor o Suscriptor):</label>
+        <input class="form-control" id="nivelUsuario" name="nivelUsuario" placeholder="Eres Editor o Suscriptor">
+    </div>
+    <div class="form-group col-lg-4 container">
+        <label for="correo">Correo:</label>
+        <input class="form-control" id="correo" name="correo" placeholder="Ingresa tu correo">
+    </div>
+    <div class="form-group col-lg-4 container">
+        <label for="telefono">Telefono:</label>
+        <input class="form-control" id="telefono" name="telefono" placeholder="Numero de telefono">
+    </div>
+    <div class="form-group col-lg-4 container">
+        <label for="hobbies">Hobbies:</label>
+        <textarea  cols="30" rows="6" class="form-control" id="hobbies" name="hobbies" placeholder="Algunos hobbies?"></textarea>
+    </div>
+    <div class="form-group col-lg-4 container">
+        <label for="intereses">Intereses:</label>
+        <textarea  cols="30" rows="6" class="form-control" id="intereses" name="intereses" placeholder="Que te interesa?"></textarea>
+    </div>
+    <div class="form-group col-lg-4 container">
+        <label for="descripcion">Descripcion Personal:</label>
+        <textarea  cols="30" rows="6" class="form-control" id="descripcion" name="descripcion" placeholder="Describete"></textarea>
+    </div>
+    <div class="form-group col-lg-4 container">
+        <label for="gustos">Gustos:</label>
+        <textarea  cols="30" rows="6" class="form-control" id="gustos" name="gustos" placeholder="Que te gusta?"></textarea>
+    </div>
+    <div class="form-group col-lg-4 container">
+        <label for="foto">Foto de perfil:</label>
+        <input type="file" class="form-control" id="foto" name="foto">
+    </div>  
+    <div class="col-lg-4 container">
+        <button type="submit" class="btn btn-primary">Registrar</button>
+    </div>
+</form>
