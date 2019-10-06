@@ -22,7 +22,7 @@ public class RegistroU {
 
     public void crearUsuario(Usuario usuario) throws UserCreationException {
         try {
-            PreparedStatement ps = cn.prepareStatement("INSERT INTO Exercise VALUES (?,?,?,?,?,?,?,?,?,?,?)");
+            PreparedStatement ps = cn.prepareStatement("INSERT INTO User VALUES (?,?,?,?,?,?,?,?,?,?,?)");
             ps.setInt(1, 0);
             ps.setString(2, usuario.getNombre());
             ps.setString(3, usuario.getPass());

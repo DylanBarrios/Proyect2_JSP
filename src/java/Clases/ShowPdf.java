@@ -46,7 +46,7 @@ public class ShowPdf extends HttpServlet {
         ResultSet rs = null;
         byte[] b = null;
         try {
-            ps = cn.prepareStatement("SELECT pdf FROM Revista");
+            ps = cn.prepareStatement("SELECT pdf FROM Revistas");
             rs = ps.executeQuery();
             while (rs.next()) {
                 b = rs.getBytes("pdf");

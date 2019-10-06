@@ -50,25 +50,18 @@
                                 <ul>
                                     <li class="first active scroll_btn"><a href="#home" >Home</a></li>
                                     <li class="scroll_btn"><a href="CreateRevista.jsp" >Crear Revista</a></li>
+                                    <li class="scroll_btn"><a href="#Aprobadas" >Revistas Aprobadas</a></li>                                   
                                     <li class="scroll_btn"><a href="#projects" >Informacion</a></li>
-                                    <li class="scroll_btn last"><a href="#contacts" >Contacts</a></li>
                                     <li class="sub-menu">
-                                        <a href="javascript:void(0);" >Pages</a>
+                                        <a href="javascript:void(0);" >Reportes</a>
                                         <ul>
-                                            <li><a href="blog.html" >Blog</a></li>
-                                            <li><a href="blog-post.html" >Blog Post</a></li>
-                                            <li><a href="portfolio-post.html" >Portfolio Single Work</a></li>
+                                            <li><a href="blog.html" >Comentarios</a></li>
+                                            <li><a href="blog-post.html" >Suscripciones</a></li>
+                                            <li><a href="portfolio-post.html" >Las más gustadas</a></li>
+                                            <li><a href="blog-post.html" >Ganancias</a></li>
                                         </ul>
                                     </li>
                                     <li>
-                                        <!-- SEARCH FORM -->
-                                        <div id="search-form" class="pull-right">
-                                            <form method="get" action="#">
-                                                <input type="text" name="Search" value="Search" onFocus="if (this.value == 'Search')
-                                                            this.value = '';" onBlur="if (this.value == '')
-                                                                        this.value = 'Search';" />
-                                            </form>
-                                        </div><!-- SEARCH FORM --></li>
                                 </ul>
                             </nav>
                         </div><!-- //MENU -->
@@ -83,6 +76,11 @@
                     <p>Fecha de Login <%=LocalDate.now()%></p>
                 </center>
             </div>
+            <div>
+                <center >
+                    <p>Revistas Pendientes de Aprobacion:</p>
+                </center>
+            </div>
             <div class="datagrid">
                 <%  Pdf p = new Pdf();
                     Revista re = new Revista();
@@ -95,13 +93,12 @@
                             <th>Autor</th>
                             <th>Fecha Creacion</th>
                             <th>PDF</th>
-                            <th>Me Gusta</th>                            
-                            <th>Comentarios</th>
+                            <th>Me Gustas</th>  
                         </tr>
                     </thead>
                     <tfoot>
                         <tr>
-                            <td colspan="6">
+                            <td colspan="5">
                                 <div id="paging">
                                     <ul><li><a href="#"><span>Previous</span></a></li><li><a href="#" class="active"><span>1</span></a></li><li><a href="#"><span>2</span></a></li><li><a href="#"><span>3</span></a></li><li><a href="#"><span>4</span></a></li><li><a href="#"><span>5</span></a></li><li><a href="#"><span>Next</span></a></li></ul>
                                 </div>
@@ -128,13 +125,82 @@
                                     %>
                             </td>
                             <td><a>Hola</a></td>
-                            <td><a>Adios</a></td>
+
                         </tr>
                         <%}
                             }%>
                     </tbody>
                 </table>
             </div>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>        
+            <div id="Aprobadas">
+                <center >
+                    <p>Revistas Aprobadas:</p>
+                </center>
+
+                <div class="datagrid">
+                    <%Pdf pdf = new Pdf();
+                        Revista res = new Revista();
+                        ArrayList<Revista> listarA = pdf.ListaAprobada_Pdf();
+                    %> 
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Nombre de la Revista</th>
+                                <th>Autor</th>
+                                <th>Fecha Creacion</th>
+                                <th>PDF</th>
+                                <th>Me Gustas</th>  
+                            </tr>
+                        </thead>
+                        <tfoot>
+                            <tr>
+                                <td colspan="5">
+                                    <div id="paging">
+                                        <ul><li><a href="#"><span>Previous</span></a></li><li><a href="#" class="active"><span>1</span></a></li><li><a href="#"><span>2</span></a></li><li><a href="#"><span>3</span></a></li><li><a href="#"><span>4</span></a></li><li><a href="#"><span>5</span></a></li><li><a href="#"><span>Next</span></a></li></ul>
+                                    </div>
+                            </tr>
+                        </tfoot>
+                        <tbody>
+                            <%if (listarA.size() > 0) {
+                                    for (Revista listar3 : listarA) {
+                                        res = listar3;
+                            %>
+                            <tr>
+                                <td><%=res.getNombre()%></td>
+                                <td><%=res.getAutor()%></td>
+                                <td><%=res.getFechaCreacion()%></td>
+                                <td>
+                                    <%
+                                        if (res.getPdf() != null) {
+                                    %>
+                                    <a href="ShowPdf?autor='<%=res.getAutor()%>'" target="_blank" ><img src="images/1.png" height="50px" width="50px"  title="pdf" /></a>
+                                        <%
+                                            } else {
+                                                out.print("Vacio");
+                                            }
+                                        %>
+                                </td>
+                                <td><a>Hola</a></td>
+
+                            </tr>
+                            <%}
+                                }%>
+                        </tbody>
+                    </table>
+                </div>
+            </div> 
         </div>
     </body>
 </html>

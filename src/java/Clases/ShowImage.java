@@ -100,7 +100,7 @@ public class ShowImage extends HttpServlet {
         response.setContentType("/Image*");
 
         try {
-            PreparedStatement ps = cn.prepareStatement("SELECT foto FROM Exercise WHERE name='" + nombre + "'");
+            PreparedStatement ps = cn.prepareStatement("SELECT foto FROM User WHERE name='" + nombre + "'");
             tmp = ps.executeQuery();
             out = response.getOutputStream();
             if (tmp.next()) {

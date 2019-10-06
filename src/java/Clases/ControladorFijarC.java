@@ -13,7 +13,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
-import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -23,12 +22,12 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author jara
  */
-@WebServlet(name = "ControladorRRevista", urlPatterns = {"/ControladorRRevista"})
-@MultipartConfig(maxFileSize = 16177215)
-public class ControladorRRevista extends HttpServlet {
+@WebServlet(name = "ControladorFijarC", urlPatterns = {"/ControladorFijarC"})
+public class ControladorFijarC extends HttpServlet {
 
     Connection cn = ConectorBD.conexion();
-    float coutaExistente;
+    String nombreFC, fechaFC;
+    float cuotaFC;
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -73,44 +72,26 @@ public class ControladorRRevista extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
-        response.setContentType("application/pdf");
-        Revista rv = new Revista(request);
-        try {
-            PreparedStatement ps = cn.prepareStatement("SELECT cuotaS FROM Revistas WHERE nombreR='" + rv.getNombre() + "'");
-            ResultSet rs = ps.executeQuery();
-            if (rs.next()) {
-                coutaExistente = rs.getFloat("cuotaS");
-            } else {
-                coutaExistente = rv.getCuotaS();
-            }
-        } catch (SQLException es) {
-            System.err.println("Error al jalar la cuota existente" + es);
-        }
-        String sql = "INSERT INTO Revistas VALUES(?,?,?,?,?,?,?,?,?,?,?)";
+
+        nombreFC = request.getParameter("nombreFC");
+        fechaFC = String.valueOf(request.getParameter("fechaFC"));
+        cuotaFC = Float.parseFloat(request.getParameter("cuotaF"));
         PreparedStatement ps = null;
         try {
-            ps = cn.prepareStatement(sql);
-            ps.setInt(1, 0);
-            ps.setString(2, rv.getNombre());
-            ps.setString(3, rv.getAutor());
-            ps.setString(4, rv.getEtiqueta());
-            ps.setString(5, rv.getDescripcionR());
-            ps.setString(6, rv.getCategoria());
-            ps.setFloat(7, coutaExistente);
-            ps.setFloat(8, 0);
-            ps.setString(9, rv.getFechaCreacion());
-            ps.setBlob(10, rv.getPdf());
-            ps.setBoolean(11, false);
+            ps = cn.prepareStatement("UPDATE Revistas SET cuotaD=?, estado=? WHERE nombreR='" + nombreFC + "' AND fechaC='" + fechaFC + "'");
+            ps.setFloat(1, cuotaFC);
+            ps.setInt(2, 1);
             ps.executeUpdate();
             RequestDispatcher dispatcher = request.getRequestDispatcher("Login.jsp");
             dispatcher.forward(request, response);
-        } catch (SQLException ex) {
-            System.err.println(ex);
+        } catch (SQLException e) {
+            System.err.println("No lo lograste papu");
         } catch (Exception e) {
             request.setAttribute("error", true);
             RequestDispatcher dispatcher = request.getRequestDispatcher("Index.jsp");
             dispatcher.forward(request, response);
         }
+
     }
 
     /**

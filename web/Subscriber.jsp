@@ -52,17 +52,9 @@
                             <nav class="navmenu center">
                                 <ul>
                                     <li class="first active scroll_btn"><a href="#home" >Home</a></li>
-                                    <li class="scroll_btn"><a href="CreateRevista.jsp" >Crear Revista</a></li>
+                                    <li class="scroll_btn"><a href="#Suscritas" >Mis Revistas</a></li>
                                     <li class="scroll_btn"><a href="#projects" >Informacion</a></li>
-                                    <li class="scroll_btn last"><a href="#contacts" >Contacts</a></li>
-                                    <li class="sub-menu">
-                                        <a href="javascript:void(0);" >Pages</a>
-                                        <ul>
-                                            <li><a href="blog.html" >Blog</a></li>
-                                            <li><a href="blog-post.html" >Blog Post</a></li>
-                                            <li><a href="portfolio-post.html" >Portfolio Single Work</a></li>
-                                        </ul>
-                                    </li>
+                                    <li class="scroll_btn last"><a href="#contacts" >Contacts</a></li>                                   
                                     <li>
                                         <!-- SEARCH FORM -->
                                         <div id="search-form" class="pull-right">
@@ -84,6 +76,7 @@
                     <h1>Suscriptor EN USO: <%out.print(session.getAttribute("usuario"));%></h1>
                     <img src="ShowImage?name='nombre'" height="150px" width="150px">
                     <p>Fecha de Login <%=LocalDate.now()%></p>
+                    <h1>Previsualizacion de Revistas:</h1>
                 </center>
             </div>
             <div class="datagrid">
@@ -127,6 +120,87 @@
                             <td><%=re.getFechaCreacion()%></td>
                             <td>
                                 <a href="PagoSuscripcion.jsp" target="_blank"><img src="images/2.png" height="50px" width="50px"  title="Suscribete" /></a>
+                            </td>
+                        </tr>
+                        <%}
+                            }%>
+                    </tbody>
+                </table>
+            </div>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>  
+            <div id="Suscritas">
+                <center >
+                    <h1>Revistas Suscritas:</h1>
+                </center>
+            </div>
+            <div class="datagrid">
+                <%  Pdf pd = new Pdf();
+                    Revista res = new Revista();
+                    ArrayList<Revista> listarSus = pd.RevistaP_Pdf();
+                %> 
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Nombre de la Revista</th>
+                            <th>Autor</th>
+                            <th>Etiqueta</th>
+                            <th>Descripcion</th>
+                            <th>Categoria</th>
+                            <th>Couta de Suscripcion</th>
+                            <th>Fecha Creacion</th>
+                            <th>PDF</th>
+                            <th>Me Gusta</th>
+                            <th>Comentar</th>
+                        </tr>
+                    </thead>
+                    <tfoot>
+                        <tr>
+                            <td colspan="10">
+                                <div id="paging">
+                                    <ul><li><a href="#"><span>Previous</span></a></li><li><a href="#" class="active"><span>1</span></a></li><li><a href="#"><span>2</span></a></li><li><a href="#"><span>3</span></a></li><li><a href="#"><span>4</span></a></li><li><a href="#"><span>5</span></a></li><li><a href="#"><span>Next</span></a></li></ul>
+                                </div>
+                        </tr>
+                    </tfoot>
+                    <tbody>
+                        <%if (listarSus.size() > 0) {
+                                for (Revista listar4 : listarSus) {
+                                    res = listar4;
+                        %>
+                        <tr>
+                            <td><%=res.getNombre()%></td>
+                            <td><%=res.getAutor()%></td>
+                            <td><%=res.getEtiqueta()%></td>
+                            <td><%=res.getDescripcionR()%></td>
+                            <td><%=res.getCategoria()%></td>
+                            <td><%=res.getCuotaS()%></td>
+                            <td><%=res.getFechaCreacion()%></td>
+                            <td>
+                                <%
+                                    if (res.getPdf() != null) {
+                                %>
+                                <a href="ShowPdf?" target="_blank" ><img src="images/1.png" height="50px" width="50px"  title="Like" /></a>
+                                    <%
+                                        } else {
+                                            out.print("Vacio");
+                                        }
+                                    %>
+                            </td>
+                            <td>
+                                <a href="" target="_blank"><img src="images/like.png" height="50px" width="50px"  title="Like" /></a>
+                            </td>
+                            <td>
+                                <a href="" target="_blank"><img src="images/c.jpg" height="50px" width="50px"  title="Comenta" /></a>
                             </td>
                         </tr>
                         <%}

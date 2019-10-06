@@ -12,6 +12,7 @@ import javax.servlet.http.Part;
  * @author jara
  */
 public class Revista {
+    
     private String nombre;
     private String autor;
     private String etiqueta;
@@ -22,7 +23,7 @@ public class Revista {
     private InputStream pdf;
     Part part = null;
     
-    public Revista(){
+    public Revista(){       
     }
     
     public Revista(HttpServletRequest request) throws IOException, ServletException {

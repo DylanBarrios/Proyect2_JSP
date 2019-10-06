@@ -8,12 +8,13 @@ package Clases;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
-import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -23,12 +24,12 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author jara
  */
-@WebServlet(name = "ControladorRRevista", urlPatterns = {"/ControladorRRevista"})
-@MultipartConfig(maxFileSize = 16177215)
-public class ControladorRRevista extends HttpServlet {
+@WebServlet(name = "ControladorSuscripcion", urlPatterns = {"/ControladorSuscripcion"})
+public class ControladorSuscripcion extends HttpServlet {
 
     Connection cn = ConectorBD.conexion();
-    float coutaExistente;
+    int nombreS, revistaS;
+    String name, rev;
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -58,7 +59,6 @@ public class ControladorRRevista extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
-
     }
 
     /**
@@ -73,44 +73,56 @@ public class ControladorRRevista extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
-        response.setContentType("application/pdf");
-        Revista rv = new Revista(request);
+
+        PreparedStatement ps1 = null;
+        PreparedStatement ps2 = null;
+        name = request.getParameter("nombreS");
+        rev = request.getParameter("revistaS");
+
         try {
-            PreparedStatement ps = cn.prepareStatement("SELECT cuotaS FROM Revistas WHERE nombreR='" + rv.getNombre() + "'");
-            ResultSet rs = ps.executeQuery();
-            if (rs.next()) {
-                coutaExistente = rs.getFloat("cuotaS");
-            } else {
-                coutaExistente = rv.getCuotaS();
+            ps1 = cn.prepareStatement("SELECT id_revista FROM Revistas WHERE nombreR='" + rev + "'");
+            ResultSet rs1 = ps1.executeQuery();
+            if (rs1.next()) {
+                revistaS = rs1.getInt("id_revista");
             }
-        } catch (SQLException es) {
-            System.err.println("Error al jalar la cuota existente" + es);
+        } catch (SQLException e) {
+            System.err.println(e);
         }
-        String sql = "INSERT INTO Revistas VALUES(?,?,?,?,?,?,?,?,?,?,?)";
+
+        try {
+            ps2 = cn.prepareStatement("SELECT id_user FROM User WHERE name='" + name + "'");
+            ResultSet rs2 = ps2.executeQuery();
+            if (rs2.next()) {
+                nombreS = rs2.getInt("id_user");
+            }
+        } catch (SQLException ex) {
+            System.err.println(ex);
+        }
+
+        Date now = new Date(System.currentTimeMillis());
+        SimpleDateFormat date = new SimpleDateFormat("yyyy-MM-dd");
+
+        String sql = "INSERT INTO Suscripcion VALUES(?,?,?,?,?)";
         PreparedStatement ps = null;
+
         try {
             ps = cn.prepareStatement(sql);
             ps.setInt(1, 0);
-            ps.setString(2, rv.getNombre());
-            ps.setString(3, rv.getAutor());
-            ps.setString(4, rv.getEtiqueta());
-            ps.setString(5, rv.getDescripcionR());
-            ps.setString(6, rv.getCategoria());
-            ps.setFloat(7, coutaExistente);
-            ps.setFloat(8, 0);
-            ps.setString(9, rv.getFechaCreacion());
-            ps.setBlob(10, rv.getPdf());
-            ps.setBoolean(11, false);
+            ps.setInt(2, revistaS);
+            ps.setInt(3, nombreS);
+            ps.setString(4, date.format(now));
+            ps.setInt(5, 1);
             ps.executeUpdate();
-            RequestDispatcher dispatcher = request.getRequestDispatcher("Login.jsp");
-            dispatcher.forward(request, response);
-        } catch (SQLException ex) {
-            System.err.println(ex);
-        } catch (Exception e) {
+        } catch (SQLException m) {
+            System.err.println(m);
+        } catch (Exception n) {
             request.setAttribute("error", true);
             RequestDispatcher dispatcher = request.getRequestDispatcher("Index.jsp");
             dispatcher.forward(request, response);
         }
+        RequestDispatcher dispatcher = request.getRequestDispatcher("PagoRevista.jsp");
+        dispatcher.forward(request, response);
+
     }
 
     /**

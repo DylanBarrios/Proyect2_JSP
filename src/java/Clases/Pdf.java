@@ -19,12 +19,13 @@ public class Pdf {
 
     Connection cn = ConectorBD.conexion();
     String autorL;
-
+    int idU;
+    
     /*Metodo listar*/
     public ArrayList<Revista> Listar_Pdf() {
         autorL = ControladorLogin.nameL;
         ArrayList<Revista> list = new ArrayList<Revista>();
-        String sql = "SELECT nombreR, autor, fechaC, pdf FROM Revista WHERE autor='" + autorL + "'";
+        String sql = "SELECT nombreR, autor, fechaC, pdf FROM Revistas WHERE autor='" + autorL + "' AND estado=0";
         ResultSet rs = null;
         PreparedStatement ps = null;
         try {
@@ -34,7 +35,68 @@ public class Pdf {
                 Revista r = new Revista();
                 r.setNombre(rs.getString("nombreR"));
                 r.setAutor(rs.getString("autor"));
-                r.setFechaCreacion(String.valueOf(rs.getDate("fechaC")));
+                r.setFechaCreacion(rs.getString("fechaC"));
+                r.setPdf(rs.getBinaryStream("pdf"));
+                list.add(r);
+            }
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+        } catch (Exception ex) {
+            System.out.println(ex.getMessage());
+        } finally {
+            try {
+                ps.close();
+                rs.close();
+                cn.close();
+            } catch (Exception ex) {
+            }
+        }
+        return list;
+    }
+     public ArrayList<Revista> ListaAprobada_Pdf() {
+         autorL = ControladorLogin.nameL;
+        ArrayList<Revista> lista = new ArrayList<Revista>();
+        String sql1 = "SELECT nombreR, autor, fechaC, pdf FROM Revistas WHERE autor='" + autorL + "' AND estado=1";
+        ResultSet rs1 = null;
+        PreparedStatement ps1 = null;
+        try {
+            ps1 = cn.prepareStatement(sql1);
+            rs1 = ps1.executeQuery();
+            while (rs1.next()) {
+                Revista r1 = new Revista();
+                r1.setNombre(rs1.getString("nombreR"));
+                r1.setAutor(rs1.getString("autor"));
+                r1.setFechaCreacion(rs1.getString("fechaC"));
+                r1.setPdf(rs1.getBinaryStream("pdf"));
+                lista.add(r1);
+            }
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+        } catch (Exception ex) {
+            System.out.println(ex.getMessage());
+        } finally {
+            try {
+                ps1.close();
+                rs1.close();
+                cn.close();
+            } catch (Exception ex) {
+            }
+        }
+        return lista;
+    }
+    public ArrayList<Revista> ListaAdmin_Pdf() {
+        ArrayList<Revista> list = new ArrayList<Revista>();
+        String sql = "SELECT nombreR, autor, fechaC, pdf FROM Revistas WHERE estado='false'";
+        ResultSet rs = null;
+        PreparedStatement ps = null;
+        try {
+            ps = cn.prepareStatement(sql);
+            rs = ps.executeQuery();
+            while (rs.next()) {               
+                Revista r = new Revista();
+                r.setNombre(rs.getString("nombreR"));
+                r.setAutor(rs.getString("autor"));
+                r.setFechaCreacion(rs.getString("fechaC"));
                 r.setPdf(rs.getBinaryStream("pdf"));
                 list.add(r);
             }
@@ -55,7 +117,7 @@ public class Pdf {
 
     public ArrayList<Revista> Lector_Pdf() {
         ArrayList<Revista> listLector = new ArrayList<Revista>();
-        String sql = "SELECT nombreR, autor, etiqueta, descripcionR, categoria, cuotaS, fechaC FROM Revista";
+        String sql = "SELECT nombreR, autor, etiqueta, descripcionR, categoria, cuotaS, fechaC FROM Revistas WHERE estado='1'";
         ResultSet rs = null;
         PreparedStatement ps = null;
         try {
@@ -69,7 +131,7 @@ public class Pdf {
                 a.setDescripcionR(rs.getString("descripcionR"));
                 a.setCategoria(rs.getString("categoria"));
                 a.setCuotaS(rs.getFloat("cuotaS"));
-                a.setFechaCreacion(String.valueOf(rs.getDate("fechaC")));
+                a.setFechaCreacion(rs.getString("fechaC"));
                 listLector.add(a);
             }
         } catch (SQLException ex) {
@@ -85,39 +147,53 @@ public class Pdf {
             }
         }
         return listLector;
+    }
+    
+       public ArrayList<Revista> RevistaP_Pdf() {
+        String sql1 ="SELECT id_user FROM User WHERE name='"+ControladorLogin.nameL+"'";
+        PreparedStatement ps1 =null;
+        ResultSet rs1 = null;
+           try {
+               ps1 = cn.prepareStatement(sql1);
+               rs1 = ps1.executeQuery();
+               if (rs1.next()) {
+                   idU= rs1.getInt("id_user");
+               }
+           } catch (SQLException e) {
+               System.out.println("Vales madre" +e);
+           }
+           
+        ArrayList<Revista> listSus = new ArrayList<Revista>();
+        ResultSet rs = null;
+        PreparedStatement ps = null;
+        try {
+            ps = cn.prepareStatement("SELECT Revistas.nombreR, Revistas.autor, Revistas.etiqueta, Revistas.descripcionR, Revistas.categoria, Revistas.cuotaS, Revistas.fechaC, Revistas.pdf FROM Revistas INNER JOIN Suscripcion ON(Revistas.id_revista=Suscripcion.id_revista) INNER JOIN Pago ON(Suscripcion.id_suscripcion=Pago.id_suscripcion) AND(Suscripcion.id_user='"+idU+"')");
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                Revista s = new Revista();
+                s.setNombre(rs.getString("Revistas.nombreR"));
+                s.setAutor(rs.getString("Revistas.autor"));
+                s.setEtiqueta(rs.getString("Revistas.etiqueta"));
+                s.setDescripcionR(rs.getString("Revistas.descripcionR"));
+                s.setCategoria(rs.getString("Revistas.categoria"));
+                s.setCuotaS(rs.getFloat("Revistas.cuotaS"));
+                s.setFechaCreacion(rs.getString("Revistas.fechaC"));
+                s.setPdf(rs.getBinaryStream("Revistas.pdf"));            
+                listSus.add(s);
+            }
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+        } catch (Exception ex) {
+            System.out.println(ex.getMessage());
+        } finally {
+            try {
+                ps.close();
+                rs.close();
+                cn.close();
+            } catch (Exception ex) {
+            }
+        }
+        return listSus;
     }
 
-    public ArrayList<Revista> Suscripcion_Pdf() {
-        ArrayList<Revista> listSuscripcion = new ArrayList<Revista>();
-        String sql = "SELECT nombreR, autor, etiqueta, descripcionR, categoria, cuotaS, fechaC, pdf FROM Revista";
-        ResultSet rs = null;
-        PreparedStatement ps = null;
-        try {
-            ps = cn.prepareStatement(sql);
-            rs = ps.executeQuery();
-            while (rs.next()) {
-                Revista a = new Revista();
-                a.setNombre(rs.getString("nombreR"));
-                a.setAutor(rs.getString("autor"));
-                a.setEtiqueta(rs.getString("etiqueta"));
-                a.setDescripcionR(rs.getString("descripcionR"));
-                a.setCategoria(rs.getString("categoria"));
-                a.setCuotaS(rs.getFloat("cuotaS"));
-                a.setFechaCreacion(String.valueOf(rs.getDate("fechaC")));
-                listLector.add(a);
-            }
-        } catch (SQLException ex) {
-            System.out.println(ex.getMessage());
-        } catch (Exception ex) {
-            System.out.println(ex.getMessage());
-        } finally {
-            try {
-                ps.close();
-                rs.close();
-                cn.close();
-            } catch (Exception ex) {
-            }
-        }
-        return listLector;
-    }
 }

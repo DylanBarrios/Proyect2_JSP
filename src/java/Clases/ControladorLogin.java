@@ -27,8 +27,9 @@ public class ControladorLogin extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         nameL = request.getParameter("nombreL");
+        passL = request.getParameter("passL");
         try {
-            PreparedStatement ps = cn.prepareStatement("SELECT name, pass, nivelUsuario FROM Exercise WHERE name='" + nameL + "' AND pass='" + request.getParameter("passL") + "'");
+            PreparedStatement ps = cn.prepareStatement("SELECT name, pass, nivelUsuario FROM User WHERE name='" + nameL + "' AND pass='" +passL  + "'");
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
                 get = rs.getString("nivelUsuario");

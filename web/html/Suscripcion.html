@@ -1,22 +1,18 @@
 <link href="css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
-<form action="ControladorPago" method="POST">
+<form action="ControladorSuscripcion" method="POST">
     <div class="form-group col-lg-4 container">
-        <label for="nombreP">Nombre:</label>
-        <input  required class="form-control" id="nombreP" name="nombreP" placeholder="Ingresa tu nombre">
+        <label for="nombreS">Nombre:</label>
+        <input  required class="form-control" id="nombreS" name="nombreS" placeholder="Ingresa tu nombre">
     </div>
     <div class="form-group col-lg-4 container">
         <label for="revistaS">Revista:</label>
         <input  required class="form-control" id="revistaS" name="revistaS" placeholder="A que revista quieres suscribirte?">
     </div>
     <div class="form-group col-lg-4 container">
-        <label for="fechaS">Fecha de Suscripcion:</label>
-        <label id="fechaS"><%=LocalDate.now()%></label>
-    </div>
-    <div class="form-group col-lg-4 container">
-        <label for="fechaV">Fecha de Vencimiento:</label>
-        <input required class="form-control" id="fechaV" name="fechaV" placeholder="yyyy/MM/dd">
+        <label>Fecha de Suscripcion:</label>
+        <label id="fechaS">'<%=LocalDate.now()%>'</label>
     </div>
     <div class="col-lg-4 container">
-        <button type="submit" class="btn btn-primary">Registrar</button>
+        <button type="submit" class="btn btn-primary">Suscribirse</button>
     </div>
 </form>
