@@ -19,13 +19,14 @@ public class Pdf {
 
     Connection cn = ConectorBD.conexion();
     String autorL;
-    int idU;
+    public static int idU;
     
     /*Metodo listar*/
     public ArrayList<Revista> Listar_Pdf() {
         autorL = ControladorLogin.nameL;
+        
         ArrayList<Revista> list = new ArrayList<Revista>();
-        String sql = "SELECT nombreR, autor, fechaC, pdf FROM Revistas WHERE autor='" + autorL + "' AND estado=0";
+        String sql = "SELECT id_revista, nombreR, autor, fechaC, pdf FROM Revistas WHERE autor='" + autorL + "' AND estado=0";
         ResultSet rs = null;
         PreparedStatement ps = null;
         try {
@@ -33,6 +34,7 @@ public class Pdf {
             rs = ps.executeQuery();
             while (rs.next()) {
                 Revista r = new Revista();
+                r.setCodigoR(rs.getInt("id_revista"));
                 r.setNombre(rs.getString("nombreR"));
                 r.setAutor(rs.getString("autor"));
                 r.setFechaCreacion(rs.getString("fechaC"));
@@ -56,7 +58,7 @@ public class Pdf {
      public ArrayList<Revista> ListaAprobada_Pdf() {
          autorL = ControladorLogin.nameL;
         ArrayList<Revista> lista = new ArrayList<Revista>();
-        String sql1 = "SELECT nombreR, autor, fechaC, pdf FROM Revistas WHERE autor='" + autorL + "' AND estado=1";
+        String sql1 = "SELECT id_revista, nombreR, autor, fechaC, pdf FROM Revistas WHERE autor='" + autorL + "' AND estado=1";
         ResultSet rs1 = null;
         PreparedStatement ps1 = null;
         try {
@@ -64,6 +66,7 @@ public class Pdf {
             rs1 = ps1.executeQuery();
             while (rs1.next()) {
                 Revista r1 = new Revista();
+                r1.setCodigoR(rs1.getInt("id_revista"));
                 r1.setNombre(rs1.getString("nombreR"));
                 r1.setAutor(rs1.getString("autor"));
                 r1.setFechaCreacion(rs1.getString("fechaC"));
@@ -86,7 +89,7 @@ public class Pdf {
     }
     public ArrayList<Revista> ListaAdmin_Pdf() {
         ArrayList<Revista> list = new ArrayList<Revista>();
-        String sql = "SELECT nombreR, autor, fechaC, pdf FROM Revistas WHERE estado='false'";
+        String sql = "SELECT id_revista, nombreR, autor, fechaC, pdf FROM Revistas WHERE estado='false'";
         ResultSet rs = null;
         PreparedStatement ps = null;
         try {
@@ -94,6 +97,7 @@ public class Pdf {
             rs = ps.executeQuery();
             while (rs.next()) {               
                 Revista r = new Revista();
+                r.setCodigoR(rs.getInt("id_revista"));
                 r.setNombre(rs.getString("nombreR"));
                 r.setAutor(rs.getString("autor"));
                 r.setFechaCreacion(rs.getString("fechaC"));
@@ -117,7 +121,7 @@ public class Pdf {
 
     public ArrayList<Revista> Lector_Pdf() {
         ArrayList<Revista> listLector = new ArrayList<Revista>();
-        String sql = "SELECT nombreR, autor, etiqueta, descripcionR, categoria, cuotaS, fechaC FROM Revistas WHERE estado='1'";
+        String sql = "SELECT id_revista, nombreR, autor, etiqueta, descripcionR, categoria, cuotaS, fechaC FROM Revistas WHERE estado='1'";
         ResultSet rs = null;
         PreparedStatement ps = null;
         try {
@@ -125,6 +129,7 @@ public class Pdf {
             rs = ps.executeQuery();
             while (rs.next()) {
                 Revista a = new Revista();
+                a.setCodigoR(rs.getInt("id_revista"));
                 a.setNombre(rs.getString("nombreR"));
                 a.setAutor(rs.getString("autor"));
                 a.setEtiqueta(rs.getString("etiqueta"));
@@ -167,10 +172,11 @@ public class Pdf {
         ResultSet rs = null;
         PreparedStatement ps = null;
         try {
-            ps = cn.prepareStatement("SELECT Revistas.nombreR, Revistas.autor, Revistas.etiqueta, Revistas.descripcionR, Revistas.categoria, Revistas.cuotaS, Revistas.fechaC, Revistas.pdf FROM Revistas INNER JOIN Suscripcion ON(Revistas.id_revista=Suscripcion.id_revista) INNER JOIN Pago ON(Suscripcion.id_suscripcion=Pago.id_suscripcion) AND(Suscripcion.id_user='"+idU+"')");
+            ps = cn.prepareStatement("SELECT Revistas.id_revista, Revistas.nombreR, Revistas.autor, Revistas.etiqueta, Revistas.descripcionR, Revistas.categoria, Revistas.cuotaS, Revistas.fechaC, Revistas.pdf FROM Revistas INNER JOIN Suscripcion ON(Revistas.id_revista=Suscripcion.id_revista) INNER JOIN Pago ON(Suscripcion.id_suscripcion=Pago.id_suscripcion) AND(Suscripcion.id_user='"+idU+"')");
             rs = ps.executeQuery();
             while (rs.next()) {
                 Revista s = new Revista();
+                s.setCodigoR(rs.getInt("Revistas.id_revista"));
                 s.setNombre(rs.getString("Revistas.nombreR"));
                 s.setAutor(rs.getString("Revistas.autor"));
                 s.setEtiqueta(rs.getString("Revistas.etiqueta"));

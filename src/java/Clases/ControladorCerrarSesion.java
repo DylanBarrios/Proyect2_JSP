@@ -7,29 +7,19 @@ package Clases;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
-import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  *
  * @author jara
  */
-@WebServlet(name = "ControladorRRevista", urlPatterns = {"/ControladorRRevista"})
-@MultipartConfig(maxFileSize = 16177215)
-public class ControladorRRevista extends HttpServlet {
-
-    Connection cn = ConectorBD.conexion();
-    float coutaExistente;
-    String name;
+@WebServlet(name = "ControladorCerrarSesion", urlPatterns = {"/ControladorCerrarSesion"})
+public class ControladorCerrarSesion extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -43,7 +33,10 @@ public class ControladorRRevista extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-
+         HttpSession cerrarSesion = request.getSession();
+         cerrarSesion.removeAttribute("SesionU");
+         cerrarSesion.invalidate();
+         request.getRequestDispatcher("Login.jsp").forward(request, response);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -59,7 +52,6 @@ public class ControladorRRevista extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
-
     }
 
     /**
@@ -74,47 +66,6 @@ public class ControladorRRevista extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
-        response.setContentType("application/pdf");       
-        Revista rv = new Revista(request);
-        name= request.getParameter("nombreR");
-        
-        try {
-            PreparedStatement ps = cn.prepareStatement("SELECT cuotaS FROM Revistas WHERE nombreR='" +name + "'");
-            ResultSet rs = ps.executeQuery();
-            if (rs.next()) {
-                coutaExistente = rs.getFloat("cuotaS");
-            } else if(!rs.next()){
-                coutaExistente = rv.getCuotaS();
-            }
-        } catch (SQLException es) {
-            System.err.println("Error al jalar la cuota existente" + es);
-        }
-        
-        String sql = "INSERT INTO Revistas VALUES(?,?,?,?,?,?,?,?,?,?,?)";
-        PreparedStatement ps = null;
-        try {
-            ps = cn.prepareStatement(sql);
-            ps.setInt(1, 0);
-            ps.setString(2, rv.getNombre());
-            ps.setString(3, rv.getAutor());
-            ps.setString(4, rv.getEtiqueta());
-            ps.setString(5, rv.getDescripcionR());
-            ps.setString(6, rv.getCategoria());
-            ps.setDouble(7, coutaExistente);
-            ps.setFloat(8, 0);
-            ps.setString(9, rv.getFechaCreacion());
-            ps.setBlob(10, rv.getPdf());
-            ps.setBoolean(11, false);
-            ps.executeUpdate();
-            RequestDispatcher dispatcher = request.getRequestDispatcher("Editor.jsp");
-            dispatcher.forward(request, response);
-        } catch (SQLException ex) {
-            System.err.println(ex);
-        } catch (Exception e) {
-            request.setAttribute("error", true);
-            RequestDispatcher dispatcher = request.getRequestDispatcher("Index.jsp");
-            dispatcher.forward(request, response);
-        }
     }
 
     /**

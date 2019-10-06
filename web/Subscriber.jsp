@@ -9,7 +9,7 @@
 <%@page import="Clases.ControladorRRevista" %>
 <%@page import="Clases.Pdf" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-
+<%@page session="true" %>
 <!DOCTYPE html>
 <html>
     <head>
@@ -73,9 +73,10 @@
             </header>
             <div>
                 <center id="home" class="padbot0">
-                    <h1>Suscriptor EN USO: <%out.print(session.getAttribute("usuario"));%></h1>
+                    <h1>Suscriptor EN USO: <%out.print(session.getAttribute("SesionU"));%></h1>
                     <img src="ShowImage?name='nombre'" height="150px" width="150px">
                     <p>Fecha de Login <%=LocalDate.now()%></p>
+                    <a href="ControladorCerrarSesion">Cerrar Sesion</a>
                     <h1>Previsualizacion de Revistas:</h1>
                 </center>
             </div>
@@ -87,6 +88,7 @@
                 <table>
                     <thead>
                         <tr>
+                            <th>Codigo Revista</th>
                             <th>Nombre de la Revista</th>
                             <th>Autor</th>
                             <th>Etiqueta</th>
@@ -99,7 +101,7 @@
                     </thead>
                     <tfoot>
                         <tr>
-                            <td colspan="8">
+                            <td colspan="9">
                                 <div id="paging">
                                     <ul><li><a href="#"><span>Previous</span></a></li><li><a href="#" class="active"><span>1</span></a></li><li><a href="#"><span>2</span></a></li><li><a href="#"><span>3</span></a></li><li><a href="#"><span>4</span></a></li><li><a href="#"><span>5</span></a></li><li><a href="#"><span>Next</span></a></li></ul>
                                 </div>
@@ -111,6 +113,7 @@
                                     re = listar2;
                         %>
                         <tr>
+                            <td><%=re.getCodigoR()%></td>
                             <td><%=re.getNombre()%></td>
                             <td><%=re.getAutor()%></td>
                             <td><%=re.getEtiqueta()%></td>
@@ -152,6 +155,7 @@
                 <table>
                     <thead>
                         <tr>
+                            <th>Codigo Revista</th>
                             <th>Nombre de la Revista</th>
                             <th>Autor</th>
                             <th>Etiqueta</th>
@@ -166,7 +170,7 @@
                     </thead>
                     <tfoot>
                         <tr>
-                            <td colspan="10">
+                            <td colspan="11">
                                 <div id="paging">
                                     <ul><li><a href="#"><span>Previous</span></a></li><li><a href="#" class="active"><span>1</span></a></li><li><a href="#"><span>2</span></a></li><li><a href="#"><span>3</span></a></li><li><a href="#"><span>4</span></a></li><li><a href="#"><span>5</span></a></li><li><a href="#"><span>Next</span></a></li></ul>
                                 </div>
@@ -178,6 +182,7 @@
                                     res = listar4;
                         %>
                         <tr>
+                            <td><%=res.getCodigoR()%></td>
                             <td><%=res.getNombre()%></td>
                             <td><%=res.getAutor()%></td>
                             <td><%=res.getEtiqueta()%></td>

@@ -11,6 +11,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -28,6 +29,8 @@ public class ControladorLogin extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         nameL = request.getParameter("nombreL");
         passL = request.getParameter("passL");
+        HttpSession nuevaSesion = request.getSession();
+        nuevaSesion.setAttribute("SesionU",nameL);
         try {
             PreparedStatement ps = cn.prepareStatement("SELECT name, pass, nivelUsuario FROM User WHERE name='" + nameL + "' AND pass='" +passL  + "'");
             ResultSet rs = ps.executeQuery();

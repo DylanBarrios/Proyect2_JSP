@@ -13,6 +13,7 @@
         <%
         session.setAttribute("usuario", request.getParameter("nombre"));
         %>
+        
     </head>
     <body id="fondo">
         <div class="col-lg-4 container">

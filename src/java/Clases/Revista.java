@@ -12,7 +12,7 @@ import javax.servlet.http.Part;
  * @author jara
  */
 public class Revista {
-    
+    private int codigoR=0;
     private String nombre;
     private String autor;
     private String etiqueta;
@@ -32,10 +32,18 @@ public class Revista {
         etiqueta = request.getParameter("etiqueta");
         descripcionR = request.getParameter("descripcionR");
         categoria = request.getParameter("categoria");
-        cuotaS = Float.parseFloat(request.getParameter("cuotaS"));
+        cuotaS =Float.parseFloat(request.getParameter("cuotaS"));
         fechaCreacion = request.getParameter("fechaC");
         part = request.getPart("pdf");
         pdf= part.getInputStream();
+    }
+
+    public int getCodigoR() {
+        return codigoR;
+    }
+
+    public void setCodigoR(int codigoR) {
+        this.codigoR = codigoR;
     }
 
     public String getNombre() {
