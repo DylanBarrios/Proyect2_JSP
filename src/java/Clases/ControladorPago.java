@@ -21,11 +21,13 @@ import javax.servlet.http.HttpServletResponse;
  */
 @WebServlet(name = "ControladorPago", urlPatterns = {"/ControladorPago"})
 public class ControladorPago extends HttpServlet {
+
     Connection cn = ConectorBD.conexion();
     String namePago, revistaPago;
     int idUSER, idREVISTA, idSUS;
     float costoRevista;
-    double porcentaje,costoServicio;
+    double porcentaje, costoServicio;
+
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -68,28 +70,16 @@ public class ControladorPago extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
-        
+
         PreparedStatement ps = null;
         PreparedStatement ps1 = null;
         PreparedStatement ps2 = null;
         PreparedStatement ps3 = null;
-        
+
         namePago = request.getParameter("nombrePAGO");
         revistaPago = request.getParameter("revistaPAGO");
-        
         try {
-            ps1 = cn.prepareStatement("SELECT id_revista, cuotaS FROM Revistas WHERE nombreR='" + revistaPago + "'");
-            ResultSet rs1 = ps1.executeQuery();
-            if (rs1.next()) {
-                idREVISTA = rs1.getInt("id_revista");
-                costoRevista = rs1.getFloat("cuotaS");
-            }
-        } catch (SQLException e) {
-            System.err.println(e);
-        }
-        
-        try {
-            ps2 = cn.prepareStatement("SELECT id_user FROM User WHERE name='" + namePago+"'");
+            ps2 = cn.prepareStatement("SELECT id_user FROM User WHERE name='" + namePago + "'");
             ResultSet rs2 = ps2.executeQuery();
             if (rs2.next()) {
                 idUSER = rs2.getInt("id_user");
@@ -97,43 +87,45 @@ public class ControladorPago extends HttpServlet {
         } catch (SQLException ex) {
             System.err.println(ex);
         }
-        
-        try {
-            ps3 = cn.prepareStatement("SELECT id_suscripcion FROM Suscripcion WHERE id_user='" + idUSER+"' AND id_revista='"+idREVISTA+"'");
-            ResultSet rs3 = ps3.executeQuery();
-            if (rs3.next()) {
-                idSUS = rs3.getInt("id_suscripcion");
-            }
-        } catch (SQLException ex) {
-            System.err.println(ex);
-        }
-        
-        Date now = new Date(System.currentTimeMillis());
-        SimpleDateFormat date = new SimpleDateFormat("yyyy-MM-dd");
+        porcentaje = 0.10;
 
-        String sql = "INSERT INTO Pago VALUES(?,?,?,?,?,?,?)";
-        
-        porcentaje= 0.10;
-        costoServicio= costoRevista*porcentaje;
         try {
-            ps = cn.prepareStatement(sql);
-            ps.setInt(1, 0);
-            ps.setInt(2, idSUS);
-            ps.setString(3, date.format(now) );
-            ps.setString(4, request.getParameter("fechaVen"));
-            ps.setFloat(5,costoRevista);
-            ps.setDouble(6, porcentaje);
-            ps.setDouble(7,costoServicio);
-            ps.executeUpdate();
-            RequestDispatcher dispatcher = request.getRequestDispatcher("Login.jsp");
+            ps1 = cn.prepareStatement("SELECT id_revista, cuotaS FROM Revistas WHERE nombreR='" + revistaPago + "'");
+            ResultSet rs1 = ps1.executeQuery();
+            while (rs1.next()) {
+                try {
+                    ps3 = cn.prepareStatement("SELECT id_suscripcion FROM Suscripcion WHERE id_user='" + idUSER + "' AND id_revista='" + rs1.getInt("id_revista") + "'");
+                    ResultSet rs3 = ps3.executeQuery();
+                    while (rs3.next()) {
+                        String sql = "INSERT INTO Pago VALUES(?,?,?,?,?,?,?)";
+                        costoServicio = rs1.getFloat("cuotaS") * porcentaje;
+                        try {
+                            ps = cn.prepareStatement(sql);
+                            ps.setInt(1, 0);
+                            ps.setInt(2, rs3.getInt("id_suscripcion"));
+                            ps.setString(3, request.getParameter("fechaPAGO"));
+                            ps.setString(4, request.getParameter("fechaVen"));
+                            ps.setFloat(5, rs1.getFloat("cuotaS"));
+                            ps.setDouble(6, porcentaje);
+                            ps.setDouble(7, costoServicio);
+                            ps.executeUpdate();
+                        } catch (SQLException m) {
+                            System.err.println(m);
+                        }
+                    }
+                } catch (SQLException ex) {
+                    System.err.println(ex);
+                }
+            }
+            RequestDispatcher dispatcher = request.getRequestDispatcher("Subscriber.jsp");
             dispatcher.forward(request, response);
-        } catch (SQLException m) {
-            System.err.println(m);
+        } catch (SQLException e) {
+            System.err.println(e);
         } catch (Exception n) {
             request.setAttribute("error", true);
             RequestDispatcher dispatcher = request.getRequestDispatcher("Index.jsp");
             dispatcher.forward(request, response);
-        }    
+        }
     }
 
     /**

@@ -78,17 +78,6 @@ public class ControladorSuscripcion extends HttpServlet {
         PreparedStatement ps2 = null;
         name = request.getParameter("nombreS");
         rev = request.getParameter("revistaS");
-
-        try {
-            ps1 = cn.prepareStatement("SELECT id_revista FROM Revistas WHERE nombreR='" + rev + "'");
-            ResultSet rs1 = ps1.executeQuery();
-            if (rs1.next()) {
-                revistaS = rs1.getInt("id_revista");
-            }
-        } catch (SQLException e) {
-            System.err.println(e);
-        }
-
         try {
             ps2 = cn.prepareStatement("SELECT id_user FROM User WHERE name='" + name + "'");
             ResultSet rs2 = ps2.executeQuery();
@@ -99,30 +88,33 @@ public class ControladorSuscripcion extends HttpServlet {
             System.err.println(ex);
         }
 
-        Date now = new Date(System.currentTimeMillis());
-        SimpleDateFormat date = new SimpleDateFormat("yyyy-MM-dd");
-
-        String sql = "INSERT INTO Suscripcion VALUES(?,?,?,?,?)";
-        PreparedStatement ps = null;
-
         try {
-            ps = cn.prepareStatement(sql);
-            ps.setInt(1, 0);
-            ps.setInt(2, revistaS);
-            ps.setInt(3, nombreS);
-            ps.setString(4, date.format(now));
-            ps.setInt(5, 1);
-            ps.executeUpdate();
-        } catch (SQLException m) {
-            System.err.println(m);
+            ps1 = cn.prepareStatement("SELECT id_revista FROM Revistas WHERE nombreR='" + rev + "'");
+            ResultSet rs1 = ps1.executeQuery();
+            while (rs1.next()) {
+                String sql = "INSERT INTO Suscripcion VALUES(?,?,?,?,?)";
+                PreparedStatement ps = null;
+                try {
+                    ps = cn.prepareStatement(sql);
+                    ps.setInt(1, 0);
+                    ps.setInt(2, rs1.getInt("id_revista"));
+                    ps.setInt(3, nombreS);
+                    ps.setString(4, request.getParameter("fechaSus"));
+                    ps.setInt(5, 1);
+                    ps.executeUpdate();
+                } catch (SQLException m) {
+                    System.err.println(m);
+                }
+            }
+            RequestDispatcher dispatcher = request.getRequestDispatcher("PagoRevista.jsp");
+            dispatcher.forward(request, response);
+        } catch (SQLException e) {
+            System.err.println(e);
         } catch (Exception n) {
             request.setAttribute("error", true);
             RequestDispatcher dispatcher = request.getRequestDispatcher("Index.jsp");
             dispatcher.forward(request, response);
         }
-        RequestDispatcher dispatcher = request.getRequestDispatcher("PagoRevista.jsp");
-        dispatcher.forward(request, response);
-
     }
 
     /**

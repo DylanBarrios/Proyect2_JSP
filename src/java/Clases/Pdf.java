@@ -156,8 +156,11 @@ public class Pdf {
     
        public ArrayList<Revista> RevistaP_Pdf() {
         String sql1 ="SELECT id_user FROM User WHERE name='"+ControladorLogin.nameL+"'";
-        PreparedStatement ps1 =null;
-        ResultSet rs1 = null;
+        
+        PreparedStatement ps1 =null, ps2=null;
+        ResultSet rs1 = null,rs2 = null;      
+        ResultSet rs = null;
+        PreparedStatement ps = null;
            try {
                ps1 = cn.prepareStatement(sql1);
                rs1 = ps1.executeQuery();
@@ -167,12 +170,12 @@ public class Pdf {
            } catch (SQLException e) {
                System.out.println("Vales madre" +e);
            }
+        
            
         ArrayList<Revista> listSus = new ArrayList<Revista>();
-        ResultSet rs = null;
-        PreparedStatement ps = null;
+        
         try {
-            ps = cn.prepareStatement("SELECT Revistas.id_revista, Revistas.nombreR, Revistas.autor, Revistas.etiqueta, Revistas.descripcionR, Revistas.categoria, Revistas.cuotaS, Revistas.fechaC, Revistas.pdf FROM Revistas INNER JOIN Suscripcion ON(Revistas.id_revista=Suscripcion.id_revista) INNER JOIN Pago ON(Suscripcion.id_suscripcion=Pago.id_suscripcion) AND(Suscripcion.id_user='"+idU+"')");
+            ps = cn.prepareStatement("SELECT Revistas.id_revista, Revistas.nombreR, Revistas.autor, Revistas.etiqueta, Revistas.descripcionR, Revistas.categoria, Revistas.cuotaS,Revistas.fechaC, Revistas.pdf FROM Revistas INNER JOIN Suscripcion ON(Revistas.id_revista = Suscripcion.id_revista) INNER JOIN Pago ON (Pago.id_suscripcion = Suscripcion.id_suscripcion) WHERE Revistas.fechaC BETWEEN Pago.fecha_pago AND Pago.fecha_vencimiento;");
             rs = ps.executeQuery();
             while (rs.next()) {
                 Revista s = new Revista();

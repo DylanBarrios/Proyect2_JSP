@@ -82,7 +82,7 @@ public class ControladorFijarC extends HttpServlet {
             ps.setFloat(1, cuotaFC);
             ps.setInt(2, 1);
             ps.executeUpdate();
-            RequestDispatcher dispatcher = request.getRequestDispatcher("Login.jsp");
+            RequestDispatcher dispatcher = request.getRequestDispatcher("Admin.jsp");
             dispatcher.forward(request, response);
         } catch (SQLException e) {
             System.err.println("No lo lograste papu");

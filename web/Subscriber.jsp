@@ -144,7 +144,7 @@
             <br>  
             <div id="Suscritas">
                 <center >
-                    <h1>Revistas Suscritas:</h1>
+                    <h1>Revistas Disponibles:</h1>
                 </center>
             </div>
             <div class="datagrid">

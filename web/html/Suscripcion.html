@@ -2,15 +2,15 @@
 <form action="ControladorSuscripcion" method="POST">
     <div class="form-group col-lg-4 container">
         <label for="nombreS">Nombre:</label>
-        <input  required class="form-control" id="nombreS" name="nombreS" placeholder="Ingresa tu nombre">
+        <input  required type="text"class="form-control" id="nombreS" name="nombreS" placeholder="Ingresa tu nombre">
     </div>
     <div class="form-group col-lg-4 container">
         <label for="revistaS">Revista:</label>
-        <input  required class="form-control" id="revistaS" name="revistaS" placeholder="A que revista quieres suscribirte?">
+        <input  required type="text" class="form-control" id="revistaS" name="revistaS" placeholder="A que revista quieres suscribirte?">
     </div>
     <div class="form-group col-lg-4 container">
         <label>Fecha de Suscripcion:</label>
-        <label id="fechaS">'<%=LocalDate.now()%>'</label>
+        <input  required type="date" class="form-control" id="fechaSus" name="fechaSus" >
     </div>
     <div class="col-lg-4 container">
         <button type="submit" class="btn btn-primary">Suscribirse</button>
