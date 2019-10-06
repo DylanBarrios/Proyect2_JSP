@@ -197,15 +197,15 @@
                                 <a href="ShowPdf?" target="_blank" ><img src="images/1.png" height="50px" width="50px"  title="Like" /></a>
                                     <%
                                         } else {
-                                            out.print("Vacio");
+                                            out.print("Anonymous");
                                         }
                                     %>
                             </td>
                             <td>
-                                <a href="" target="_blank"><img src="images/like.png" height="50px" width="50px"  title="Like" /></a>
+                                <a href="ControladorReacciones?action=Like&id=<%=res.getCodigoR()%>&user=<%out.print(session.getAttribute("SesionU"));%>" target="_blank"><img src="images/like.png" height="50px" width="50px"  title="Like" /></a>
                             </td>
                             <td>
-                                <a href="" target="_blank"><img src="images/c.jpg" height="50px" width="50px"  title="Comenta" /></a>
+                                <a href="ControladorReacciones?action=Comentario&id=<%=res.getCodigoR()%>&user=<%out.print(session.getAttribute("SesionU"));%>" target="_blank"><img src="images/c.jpg" height="50px" width="50px"  title="Comenta" /></a>
                             </td>
                         </tr>
                         <%}

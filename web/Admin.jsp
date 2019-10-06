@@ -187,7 +187,7 @@
                                             <a href="ShowPdf?autor='<%=re.getAutor()%>'" target="_blank" ><img src="images/1.png" height="50px" width="50px"  title="pdf" /></a>
                                                 <%
                                                     } else {
-                                                        out.print("Vacio");
+                                                        out.print("Anonymous");
                                                     }
                                                 %>
                                         </td>
