@@ -1,6 +1,6 @@
 <%-- 
-    Document   : Index
-    Created on : 6/10/2019, 07:05:24 PM
+    Document   : ShowSuscripcion
+    Created on : 6/10/2019, 07:57:43 PM
     Author     : jara
 --%>
 
@@ -12,6 +12,6 @@
         <title>JSP Page</title>
     </head>
     <body>
-        <%@include file="html/FormIndex.html" %> 
+        <%@include file="html/FormSuscripcion.html" %>
     </body>
 </html>

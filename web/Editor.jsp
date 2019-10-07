@@ -3,6 +3,11 @@
     Created on : 9/09/2019, 03:25:02 AM
     Author     : jara
 --%>
+<%@page import="Clases.ConectorBD" %>
+<%@page import="Clases.ControladorPopularidad" %>
+<%@page import="java.sql.Connection"%>
+<%@page import="java.sql.ResultSet"%>
+<%@page import="java.sql.PreparedStatement"%>
 <%@page session="true" %>
 <%@page import="java.util.ArrayList"%>
 <%@page import="java.time.LocalDate"%>
@@ -56,9 +61,9 @@
                                     <li class="sub-menu">
                                         <a href="javascript:void(0);" >Reportes</a>
                                         <ul>
-                                            <li><a href="blog.html" >Comentarios</a></li>
-                                            <li><a href="blog-post.html" >Suscripciones</a></li>
-                                            <li><a href="portfolio-post.html" >Las más gustadas</a></li>
+                                            <li><a href="ShowComentarios.jsp" >Comentarios</a></li>
+                                            <li><a href="ShowSuscripcion.jsp" >Suscripciones</a></li>
+                                            <li><a href="Popularidad.jsp" >Las más gustadas</a></li>
                                             <li><a href="blog-post.html" >Ganancias</a></li>
                                         </ul>
                                     </li>
@@ -200,15 +205,187 @@
                                         %>
                                 </td>
                                 <td>
-                                <a href="" target="_blank"><img src="images/rea.png" height="50px" width="50px"  title="Reacciones" /></a>
-                            </td>
+                                    <a href="" target="_blank"><img src="images/rea.png" height="50px" width="50px"  title="Reacciones" /></a>
+                                </td>
                             </tr>
                             <%}
                                 }%>
                         </tbody>
                     </table>
                 </div>
-            </div> 
+            </div>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>     
+            <div class="datagrid"> 
+                <%
+
+                    Connection cn = ConectorBD.conexion();
+                    String fechai = request.getParameter("fechai");
+                    String fechao = request.getParameter("fechao");
+
+                    PreparedStatement ps1;
+                    ResultSet rs1;
+                    ps1 = cn.prepareStatement("SELECT COUNT(meGusta) AS cant, revista, fechaReaccion FROM Reacciones WHERE  meGusta='1' AND fechaReaccion BETWEEN '" + fechai + "' AND '" + fechao + "' GROUP BY revista desc");
+                    rs1 = ps1.executeQuery();
+                %>
+                <table>
+                    <tr>
+                        <th>Cantidad de Likes</th>
+                        <th>Nombre de la Revista</th>
+                        <th>Fecha de Reaccion</th>
+                    </tr>
+                    <%                while (rs1.next()) {
+
+                    %>
+                    <tr>
+                        <td><%=rs1.getInt("cant")%></td>
+                        <td><%=rs1.getString("revista")%></td>
+                        <td><%=rs1.getString("fechaReaccion")%></td>             
+                    </tr>
+                    <%
+                        }%>
+                </table>    
+            </div>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>     
+            <div class="datagrid"> 
+                <%
+
+                    String fechaCi = request.getParameter("fechaCI");
+                    String fechaCo = request.getParameter("fechaCF");
+
+                    PreparedStatement ps2;
+                    ResultSet rs2;
+                    ps2 = cn.prepareStatement("SELECT usuario, revista, comentarios, fechaReaccion FROM Reacciones WHERE comentarios!='' AND fechaReaccion BETWEEN '" + fechaCi + "' AND '" + fechaCo + "'");
+                    rs2 = ps2.executeQuery();
+                %>
+                <table>
+                    <tr>
+                        <th>Usuario</th>
+                        <th>Nombre de la Revista</th>
+                        <th>Comentarios</th>
+                        <th>Fecha de Reaccion</th>
+                    </tr>
+                    <%                while (rs2.next()) {
+
+                    %>
+                    <tr>
+                        <td><%=rs2.getString("usuario")%></td>
+                        <td><%=rs2.getString("revista")%></td>
+                        <td><%=rs2.getString("comentarios")%></td>
+                        <td><%=rs2.getString("fechaReaccion")%></td>
+                    </tr>
+                    <%
+                        }%>
+                </table>    
+            </div>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>     
+            <div class="datagrid"> 
+                <%
+                    String fechaSI = request.getParameter("fechaSI");
+                    String fechaSF = request.getParameter("fechaSF");
+                    PreparedStatement ps3;
+                    ResultSet rs3;
+                    ps3 = cn.prepareStatement("SELECT DISTINCT User.name, Revistas.nombreR, Suscripcion.fecha_suscripcion FROM Suscripcion JOIN Revistas ON(Suscripcion.id_revista=Revistas.id_revista) JOIN User ON(Suscripcion.id_user=User.id_user) WHERE Suscripcion.fecha_suscripcion BETWEEN '" + fechaSI + "' AND '" + fechaSF + "'");
+                    rs3 = ps3.executeQuery();
+                %>
+                <table>
+                    <tr>
+                        <th>Usuario</th>
+                        <th>Nombre de la Revista</th>
+                        <th>Fecha de Reaccion</th>
+                    </tr>
+                    <%                while (rs3.next()) {
+
+                    %>
+                    <tr>
+                        <td><%=rs3.getString("User.name")%></td>
+                        <td><%=rs3.getString("Revistas.nombreR")%></td>
+                        <td><%=rs3.getString("Suscripcion.fecha_suscripcion")%></td>
+                    </tr>
+                    <%
+                        }%>
+                </table>    
+            </div>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>     
+            <div class="datagrid"> 
+                <%
+                    String fechaGI = request.getParameter("fechaGI");
+                    String fechaGF = request.getParameter("fechaGF");
+                    PreparedStatement ps4;
+                    ResultSet rs4;
+                    double ganancias, precioS, costoDia, costoMante, costoSuscripcion;
+                    String fechaC, fechaDSus, fechaTo;
+                    
+                    ps4 = cn.prepareStatement("SELECT DISTINCT Revistas.cuotaS, Revistas.cuotaD, Revista.fechaC, Suscripcion.fecha_suscripcion,Pago.fecha_vencimiento , Pago.costo_suscripcion FROM Suscripcion JOIN Revistas ON(Suscripcion.id_revista=Revistas.id_revista) JOIN User ON(Suscripcion.id_user=User.id_user) WHERE Suscripcion.fecha_suscripcion BETWEEN '" + fechaSI + "' AND '" + fechaSF + "'");
+                    rs4 = ps4.executeQuery();
+                %>
+                <table>
+                    <tr>
+                        <th>Ganancias</th>
+                        <th>Nombre de la Revista</th>
+                        <th>Total</th>
+                    </tr>
+                    <%                while (rs4.next()) {
+                        precioS = rs4.getDouble("Revistas.cuotaS");
+                        costoDia = rs4.getDouble("Revistas.cuotaD");
+                        fechaC = rs4.getString("Revista.fechaC");
+                        fechaDSus = rs4.getString("Suscripcion.fecha_suscripcion");
+                        fechaTo = rs4.getString("Pago.fecha_vencimiento");
+                        costoSuscripcion = rs4.getDouble("Pago.costo_suscripcion");
+
+                    %>
+                    <tr>
+                        <td><%=rs4.getString("User.name")%></td>
+                        <td><%=rs4.getString("Revistas.nombreR")%></td>
+                        <td><%=rs4.getString("Suscripcion.fecha_suscripcion")%></td>
+                    </tr>
+                    <%
+                        }%>
+                </table>    
+            </div>
         </div>
     </body>
 </html>

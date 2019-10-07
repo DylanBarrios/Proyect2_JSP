@@ -15,7 +15,7 @@
         %>
         
     </head>
-    <body id="fondo">
+    <body>
         <div class="col-lg-4 container">
         <h1>Inicio de Sesion!</h1>
         </div>

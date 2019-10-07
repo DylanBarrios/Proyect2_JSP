@@ -39,7 +39,7 @@
             session.setAttribute("usuario", request.getParameter("nombreL"));
         %>
     </head>
-    <body id="fondo">
+    <body>
         <!-- PRELOADER -->
         <img id="preloader" src="images/preloader.gif" alt="" /> 
         <!-- //PRELOADER -->
@@ -67,7 +67,6 @@
                         </div><!-- //MENU -->
                     </div><!-- //MENU BLOCK -->
                 </div>
-
             </header>
             <div>
                 <center id="home" class="padbot0">
@@ -78,34 +77,6 @@
 
                 </center>
             </div>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
             <br>
             <br>
             <br>
@@ -196,29 +167,12 @@
 
                                     </tr>
                                     <%}
-                                        }%>
+                                            }%>
                                 </tbody>
                             </table>
                         </div>
                     </div>
                 </div>
-                <br>
-                <br>
-                <br>
-                <br>
-                <br>
-                <br>
-                <br>
-                <br>
-                <br>
-                <br>
-                <br>
-                <br>
-                <br>
-                <br>
-                <br>
-                <br>
-                <br>
                 <br>
                 <br>
                 <br>
